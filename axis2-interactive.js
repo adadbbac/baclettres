@@ -1,0 +1,34 @@
+(function(){
+  const KEY='adab_bac_axis2_interactive_v1';
+  const state=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}};
+  const save=s=>localStorage.setItem(KEY,JSON.stringify(s));
+  const page=location.pathname.split('/').pop();
+  let type='axis', content=false;
+  if(/^axis2-lessons(?:-\d+)?\.html$/.test(page)){type='lessons';content=/^axis2-lessons-\d+\.html$/.test(page)}
+  if(/^axis2-exercises(?:-\d+)?\.html$/.test(page)){type='exercises';content=/^axis2-exercises-\d+\.html$/.test(page)}
+  if(/^axis2-research(?:-\d+)?\.html$/.test(page)){type='research';content=/^axis2-research-\d+\.html$/.test(page)}
+  if(/^axis2-accompaniment(?:-\d+)?\.html$/.test(page)){type='accompaniment';content=/^axis2-accompaniment-\d+\.html$/.test(page)}
+  const data={
+    axis:{title:'مسار تفاعلي في المنزع العقلي',sub:'اختر المجال، ثم تعلّم بخطوات قصيرة وواضحة.',cards:[['1 · اختر','ابدأ من المجال الذي يناسب هدفك الآن.'],['2 · اقرأ','لا تنتقل إلى الإجابة قبل فهم المطلوب.'],['3 · فكّر','استخرج الفكرة أو الحجة التي تقودك.'],['4 · طبّق','حوّل ما فهمته إلى إجابة أو ملاحظة.']],qs:[['ما الذي تريد تحسينه الآن؟','اختر: الفهم، التحليل، الحجاج، أم الكتابة.'],['ما السؤال الذي سيقود قراءتك؟','صغ سؤالًا واحدًا قبل البدء.']]},
+    lessons:{title:'التوجيه التفاعلي للدرس',sub:'تعلّم على أربع محطات دون إطالة الصفحة.',cards:[['أقرأ','تصفّح العناوين والمفاهيم أولًا.'],['أفهم','حدّد القضية المركزية والعلاقات بين الأفكار.'],['أحلّل','اربط المضمون بالأساليب والحجج والشواهد.'],['أثبّت','اكتب خلاصة قصيرة ثم انتقل إلى التدريب.']],qs:[['ما القضية المركزية في الدرس؟','أجب بجملة واحدة، ثم ارجع إلى النص للتحقق.'],['ما الحجة أو الشاهد الأبرز؟','اختر شاهدًا واحدًا واشرح وظيفته.']]},
+    exercises:{title:'التوجيه التفاعلي للتدريب',sub:'حلّ، تحقّق، ثم افهم سبب الصواب أو الخطأ.',cards:[['قبل الحل','حدّد نوع السؤال وما يطلبه بدقة.'],['أجيب','أنجز الإجابة دون النظر إلى الحل إن وجد.'],['أتحقق','قارن إجابتك بالمعايير أو التصحيح.'],['أتعلم من الخطأ','سجّل سبب الخطأ وكيف تتجنبه لاحقًا.']],qs:[['ما المطلوب فعلًا؟','ضع خطًا تحت فعل الأمر: استخرج، حلّل، علّل، قارن…'],['كيف تبرهن؟','لا تكتفِ بالإجابة؛ أضف الشاهد أو التعليل المناسب.']]},
+    research:{title:'التوجيه التفاعلي للبحث',sub:'حوّل البحث من تجميع معلومات إلى بناء فكرة وحجة.',cards:[['أحدّد','حوّل الموضوع إلى سؤال بحث واضح.'],['أجمع','اجمع الأفكار المرتبطة بالمحور لا المعلومات الزائدة.'],['أنظّم','قسّم المادة إلى محاور مترابطة.'],['أكتب','قدّم فكرة، ثم دليلًا أو مثالًا، ثم استنتاجًا.']],qs:[['ما سؤال بحثك؟','صغه في سؤال لا في عنوان فقط.'],['ما الذي يثبت فكرتك؟','اختر مصدرًا أو شاهدًا يدعم كل فكرة رئيسية.']]},
+    accompaniment:{title:'التوجيه التفاعلي في المرافقة',sub:'ابنِ التحليل بنفسك بدل حفظ قالب جاهز.',cards:[['ألاحظ','التقط الظاهرة أو المعطى النصي.'],['أفسّر','اسأل: لماذا استُعمل؟ وكيف يعمل؟'],['أربط','اربط الظاهرة بالدلالة وقضية النص.'],['أستنتج','حوّل الملاحظات إلى فقرة تحليلية متماسكة.']],qs:[['هل لديك شاهد؟','لا تكتب حكمًا تحليليًا بلا قرينة نصية.'],['هل ربطت الشكل بالمعنى؟','اذكر الظاهرة، وظيفتها، ثم دلالتها.']]}
+  }[type];
+  function build(){
+    const host=document.createElement('section');host.className='axis2i';host.innerHTML=`<div class="axis2i-head"><div><h2>${data.title}</h2><p>${data.sub}</p></div><div class="axis2i-progress" data-pcount>0 / 4 مكتملة</div></div><div class="axis2i-tabs"><button class="axis2i-tab active" data-tab="path">المسار</button><button class="axis2i-tab" data-tab="think">أفكّر</button><button class="axis2i-tab" data-tab="check">أتحقق</button><button class="axis2i-tab" data-tab="apply">أطبّق</button></div><div class="axis2i-panels"><div class="axis2i-panel active" data-panel="path"><div class="axis2i-grid">${data.cards.map((c,i)=>`<div class="axis2i-card"><strong>${c[0]}</strong><p>${c[1]}</p><div class="axis2i-actions"><button class="axis2i-action" data-stage="${i}">تمّ</button></div></div>`).join('')}</div></div><div class="axis2i-panel" data-panel="think">${data.qs.map((q,i)=>`<div class="axis2i-question"><span>${i+1}</span><div><p><strong>${q[0]}</strong></p><div class="axis2i-actions"><button class="axis2i-action" data-hint="${i}">أظهر توجيهًا</button></div><div class="axis2i-hint" data-hint-box="${i}">${q[1]}</div></div></div>`).join('')}</div><div class="axis2i-panel" data-panel="check"><div class="axis2i-grid"><div class="axis2i-card"><strong>قاعدة سريعة</strong><p>${type==='accompaniment'?'كل فكرة تحليلية تحتاج قرينة ثم تفسيرًا ودلالة.':type==='research'?'كل فكرة رئيسية تحتاج سؤالًا ودليلًا وتنظيمًا.':type==='exercises'?'اقرأ فعل السؤال قبل صياغة الإجابة.':'الفهم يسبق التحليل، والتحليل يسبق الاستنتاج.'}</p></div><div class="axis2i-card"><strong>اختبر نفسك</strong><p>هل تستطيع تلخيص ما قرأته في ثلاث جمل دون نسخ النص؟</p></div><div class="axis2i-card"><strong>راجع</strong><p>إذا كانت الإجابة عامة جدًا، أضف شاهدًا أو تعليلًا محددًا.</p></div><div class="axis2i-card"><strong>ثبّت</strong><p>سجّل ملاحظة واحدة تعود إليها عند مراجعة المحور.</p></div></div></div><div class="axis2i-panel" data-panel="apply"><div class="axis2i-grid"><div class="axis2i-card"><strong>خطوتك التالية</strong><p>${content?'بعد قراءة المادة، انتقل إلى التطبيق أو المرافقة المرتبطة بها.':'اختر أحد الأقسام الأربعة وابدأ بالمادة الأقرب إلى هدفك.'}</p></div><div class="axis2i-card"><strong>لا تحفظ القالب</strong><p>استعمل الخطوات لتوجيه التفكير، ثم اكتب بصياغتك الخاصة.</p></div></div></div></div><div class="axis2i-footer">يُحفظ تقدّم هذه المحطات على هذا الجهاز فقط في النسخة التجريبية الحالية.</div>`;
+    const article=document.querySelector('article.content');
+    const note=document.querySelector('.note');
+    if(article) article.parentNode.insertBefore(host,article); else if(note) note.parentNode.insertBefore(host,note.nextSibling); else document.querySelector('main')?.prepend(host);
+    bind(host);
+  }
+  function bind(host){
+    const s=state();const prefix=type+':'+page+':';
+    const refresh=()=>{let n=0;host.querySelectorAll('[data-stage]').forEach(b=>{const done=!!s[prefix+'stage'+b.dataset.stage];b.classList.toggle('done',done);b.textContent=done?'✓ تم':'تمّ';if(done)n++});host.querySelector('[data-pcount]').textContent=n+' / 4 مكتملة';save(s)};
+    host.querySelectorAll('[data-stage]').forEach(b=>b.addEventListener('click',()=>{s[prefix+'stage'+b.dataset.stage]=!s[prefix+'stage'+b.dataset.stage];refresh()}));
+    host.querySelectorAll('[data-tab]').forEach(tab=>tab.addEventListener('click',()=>{host.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===tab));host.querySelectorAll('[data-panel]').forEach(p=>p.classList.toggle('active',p.dataset.panel===tab.dataset.tab))}));
+    host.querySelectorAll('[data-hint]').forEach(b=>b.addEventListener('click',()=>{const box=host.querySelector(`[data-hint-box="${b.dataset.hint}"]`);box.classList.toggle('show');b.textContent=box.classList.contains('show')?'إخفاء التوجيه':'أظهر توجيهًا'}));
+    refresh();
+  }
+  document.addEventListener('DOMContentLoaded',()=>{if(document.body)build()});
+})();
