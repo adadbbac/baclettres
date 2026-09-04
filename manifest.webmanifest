@@ -1,0 +1,11 @@
+{
+  "name": "أدب باك",
+  "short_name": "أدب باك",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f3eb",
+  "theme_color": "#0b4356"
+}
